@@ -1,9 +1,12 @@
 package PlaceItControllers;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+
+import org.json.JSONException;
 
 import com.classproj.placeit.iView;
 import com.classproj.placeit.PlaceItSettings;
@@ -14,20 +17,21 @@ import Models.PLSchedule;
 import Models.PlaceIt;
 import PlaceItDB.iPLScheduleModel;
 import PlaceItDB.iPlaceItModel;
+import PlaceItDB.iPlaceItModelv2;
 
 public class PlaceItScheduler {
 
-	private iPlaceItModel PLrepository;
+	private iPlaceItModelv2 PLrepository;
 	private iPLScheduleModel scheduleRepository;
 	private iView view;
 
-	public PlaceItScheduler(iPLScheduleModel scheduleDB, iPlaceItModel db, iView view) {
+	public PlaceItScheduler(iPLScheduleModel scheduleDB, iPlaceItModelv2 db, iView view) {
 		this.PLrepository = db;
 		this.scheduleRepository = scheduleDB;
 		this.view = view;
 	}
 
-	public void setUpSchedules() {
+	public void setUpSchedules() throws IllegalStateException, IOException, JSONException {
 		List<PlaceIt> placeits = this.PLrepository.getAllPlaceIts();
 		for (PlaceIt placeit : placeits) {
 			if (placeit.isActive() == true) {
@@ -161,7 +165,7 @@ public class PlaceItScheduler {
 		else return false;
 	}
 	
-	public List<PlaceIt> checkActive(List<PlaceIt> placeits){
+	public List<PlaceIt> checkActive(List<PlaceIt> placeits) throws IllegalStateException, IOException, JSONException{
 		List<PlaceIt> newActive = new Vector<PlaceIt>();
 		for (int i = 0; i < placeits.size(); i++) {
 			PlaceIt plDB = this.PLrepository.getPlaceIt(placeits.get(i).getID());

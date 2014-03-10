@@ -1,22 +1,29 @@
 package com.classproj.placeit;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.json.JSONException;
+
+import HTTP.RequestReceiver;
+import HTTP.RequestTask;
+import Models.LocationPlaceIt;
 import Models.PlaceIt;
 import PlaceItControllers.PlaceItController;
 import PlaceItControllers.PlaceItScheduler;
-import PlaceItDB.PLScheduleHandler;
-import PlaceItDB.PlaceItHandler;
-import PlaceItDB.iPLScheduleModel;
-import PlaceItDB.iPlaceItModel;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.location.LocationListener;
@@ -26,7 +33,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -38,11 +44,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -115,6 +121,7 @@ public class MainActivity extends FragmentActivity implements
 		swipebarElements = newArray;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -125,12 +132,23 @@ public class MainActivity extends FragmentActivity implements
 		GoogleMap googleMap = this.setUpMapIfNeeded();
 		googleMap.setOnMapClickListener(this);
 		googleMap.setMyLocationEnabled(true);
-
+/*
 		iPLScheduleModel scheduleDB = new PLScheduleHandler(record);
-		iPlaceItModel db = new PlaceItHandler(record);
+		iPlaceItModelv2 db = new PlaceItHandler(record);
 		scheduler = new PlaceItScheduler(scheduleDB, db, this);
 		controller = new PlaceItController(db, this);
-		controller.initializeView();
+		try {
+			controller.initializeView();
+		} catch (IllegalStateException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this
@@ -144,7 +162,18 @@ public class MainActivity extends FragmentActivity implements
 				.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
 		if (myLocationNow != null) {
-			checkList = controller.checkCoordinates(myLocationNow);
+			try {
+				checkList = controller.checkCoordinates(myLocationNow);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		mLocationRequest = LocationRequest.create();
@@ -154,7 +183,31 @@ public class MainActivity extends FragmentActivity implements
 		mLocationRequest.setInterval(PlaceItSettings.NOTIFICATION_INTERVAL);
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationClient.connect();
+		*/
+		CookieStore cookieStore = new BasicCookieStore();
+		final HttpContext localContext = new BasicHttpContext();
+		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+		final RequestReceiver receiver2 = new RequestReceiver(){
+			@Override
+			public void receiveTask(String s){
+				Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+			}
+		};	
+		RequestReceiver receiver = new RequestReceiver(){
+			@Override
+			public void receiveTask(String s){
+				Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+				 new RequestTask(receiver2,localContext).execute("http://placeit-db.herokuapp.com/placeits");
+			}
+		};
 
+		List<NameValuePair> login = new Vector<NameValuePair>();
+		login.add(new BasicNameValuePair("pid", "A09240459"));
+		login.add(new BasicNameValuePair("password", "10201992Aa"));
+		
+		   new RequestTask(receiver,localContext, login).execute("http://placeit-db.herokuapp.com/login");
+		   
+		   
 	}
 
 	
@@ -469,7 +522,7 @@ public class MainActivity extends FragmentActivity implements
 		return true;
 	}
 
-	public void addMarker(PlaceIt pc) {
+	public void addMarker(LocationPlaceIt pc) {
 		String title = pc.getTitle();
 		String descText = pc.getDescription();
 		Marker added = googleMap.addMarker(new MarkerOptions()
@@ -536,7 +589,18 @@ public class MainActivity extends FragmentActivity implements
 				"Location changed : " + arg0.getLatitude() + ","
 						+ arg0.getLongitude(), Toast.LENGTH_SHORT).show();
 
-		List<PlaceIt> cleanList = controller.checkCoordinates(arg0);
+		try {
+			List<PlaceIt> cleanList = controller.checkCoordinates(arg0);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -573,7 +637,7 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public void notifyUser(List<PlaceIt> placeits, String ControllerType) {
+	public void notifyUser(List<PlaceIt> placeits, String ControllerType) throws IllegalStateException, IOException, JSONException {
 		Toast.makeText(MainActivity.this, "Place-it notified by " + ControllerType + " with " + placeits.size() + " placeits",
 				Toast.LENGTH_SHORT).show();
 		if (ControllerType.equals("Controller")) {
@@ -603,6 +667,12 @@ public class MainActivity extends FragmentActivity implements
 			this.setUpDiscard();	
 		}
 
+	}
+
+	@Override
+	public void addMarker(PlaceIt pc) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import HTTP.RequestReceiver;
+import Models.LocationPlaceIt;
 import Models.PlaceIt;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,7 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
+public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 {
 
 	// All Static variables
 	// Database Version
@@ -57,14 +59,14 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 	}
 
 	@Override
-	public long addPlaceIt(PlaceIt placeIt) {
+	public String addPlaceIt(PlaceIt placeIt) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE, placeIt.getTitle());
 		values.put(KEY_DESCRIPTION, placeIt.getDescription());
-		values.put(KEY_LONGITUDE, placeIt.getLongitude());
-		values.put(KEY_LATITUDE, placeIt.getLatitude());
+	/*	values.put(KEY_LONGITUDE, placeIt.getLongitude());
+		values.put(KEY_LATITUDE, placeIt.getLatitude());*/
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(placeIt.getActiveDate());
 		cal.add(Calendar.MINUTE, 45);
@@ -72,11 +74,11 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 		// Inserting Row
 		long id = db.insert(TABLE_PLACEITS, null, values);
 		db.close(); // Closing database connection
-		return id;
+		return Long.toString(id);
 
 	}
-	@Override
-	public PlaceIt getPlaceIt(int id) {
+	
+	public PlaceIt getPlaceIt(String id) {
 		List<PlaceIt> placeItList = new ArrayList<PlaceIt>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_PLACEITS + " WHERE " + KEY_ID + " = " + id;
@@ -87,14 +89,12 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				PlaceIt contact = new PlaceIt();
-				contact.setID(Integer.parseInt(cursor.getString(0)));
+				PlaceIt contact = new LocationPlaceIt(cursor.getString(1),cursor.getString(2));
+				contact.setID(cursor.getString(0));
 
-				Log.d("placeit created had id", Integer.toString(contact.getID()));
-				contact.setTitle(cursor.getString(1));
-				contact.setDescription(cursor.getString(2));
-				contact.setLatitude(Double.valueOf(cursor.getString(4)));
-				contact.setLongitude(Double.valueOf(cursor.getString(3)));
+		//		Log.d("placeit created had id", Integer.toString(contact.getID()));
+				/*contact.setLatitude(Double.valueOf(cursor.getString(4)));
+				contact.setLongitude(Double.valueOf(cursor.getString(3)));*/
 				double ds = Double.parseDouble(cursor.getString(5));
 				long sd = (long) ds;
 				contact.setActiveDate(sd);
@@ -111,7 +111,7 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 	}
 
 	@Override
-	public List<PlaceIt> getAllPlaceIts() {
+	public void getAllPlaceIts(RequestReceiver receiver) {
 		List<PlaceIt> placeItList = new ArrayList<PlaceIt>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_PLACEITS;
@@ -122,7 +122,7 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				PlaceIt contact = new PlaceIt();
+				/*PlaceIt contact = new PlaceIt();
 				contact.setID(Integer.parseInt(cursor.getString(0)));
 
 				Log.d("placeit created had id", Integer.toString(contact.getID()));
@@ -132,29 +132,20 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 				contact.setLongitude(Double.valueOf(cursor.getString(3)));
 				double ds = Double.parseDouble(cursor.getString(5));
 				long sd = (long) ds;
-				contact.setActiveDate(sd);
+				contact.setActiveDate(sd);*/
 				// Adding placeit to listr
-				placeItList.add(contact);
+			//	placeItList.add(contact);
 			} while (cursor.moveToNext());
 		}
 
 		// return contact list
-		return placeItList;
+		//return placeItList;
 	}
 
-	@Override
-	public int getPlaceItsCount() {
-		String countQuery = "SELECT  * FROM " + TABLE_PLACEITS;
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(countQuery, null);
-		cursor.close();
-
-		// return count
-		return cursor.getCount();
-	}
+	
 
 	@Override
-	public int updatePlaceIt(PlaceIt placeit) {
+	public void updatePlaceIt(PlaceIt placeit, RequestReceiver receiver) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -163,8 +154,6 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 		values.put(KEY_ACTIVEDATE, placeit.getActiveDate().getTime());
 		Log.d("UPDATING VALUES", values.toString());
 		// updating row
-		return db.update(TABLE_PLACEITS, values, KEY_ID + " = ?",
-				new String[] { String.valueOf(placeit.getID()) });
 	}
 
 	@Override
@@ -175,7 +164,7 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 	}
 
 	@Override
-	public void deletePlaceIt(PlaceIt placeit) {
+	public void deletePlaceIt(PlaceIt placeit, RequestReceiver receiver) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		db.delete(TABLE_PLACEITS, KEY_ID + " = ?",
@@ -186,8 +175,14 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModel {
 	@Override
 	public void deactivatePlaceit(PlaceIt placeit) {
 		placeit.setActiveDate(0); /* maybe... */
-		this.updatePlaceIt(placeit);
+		//this.updatePlaceIt(placeit);
 
+	}
+
+	@Override
+	public void getPlaceIt(String id, RequestReceiver receiver) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

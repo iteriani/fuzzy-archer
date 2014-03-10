@@ -4,7 +4,11 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="res"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Reginald/Downloads/autobahn-0.5.0/autobahn-0.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Reginald/Downloads/autobahn-0.5.0/jackson-core-asl-1.9.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Reginald/Downloads/autobahn-0.5.0/jackson-mapper-asl-1.9.7.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="C:/Users/Reginald/Desktop/CSE110/TooTallNate-Java-WebSocket-7c3b223/dist/java_websocket.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

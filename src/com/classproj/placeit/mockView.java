@@ -22,7 +22,7 @@ public class mockView implements iView{
 	public void addMarker(PlaceIt pc) {
 		String mockText = "fake"; 
 		Marker added = googleMap.addMarker(new MarkerOptions()
-				.position(new LatLng(pc.getLatitude(), pc.getLongitude()))
+				
 				.title(pc.getTitle()).snippet(mockText));
 		mMarkers.add(added);
 		

@@ -1,9 +1,15 @@
 package PlaceItControllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+
+import org.json.JSONException;
+
+import Models.LocationPlaceIt;
 import Models.PlaceIt;
 import PlaceItDB.iPlaceItModel;
+import PlaceItDB.iPlaceItModelv2;
 import android.content.Context;
 import android.location.Location;
 import android.widget.Toast;
@@ -15,19 +21,19 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PlaceItController {
 
-	private iPlaceItModel db;
+	private iPlaceItModelv2 db;
 	private iView view;
 	private List<PlaceIt> placeits;
 	List<PlaceIt> nonActive = new Vector<PlaceIt>();
 	List<PlaceIt> active = new Vector<PlaceIt>();
-	public PlaceItController(iPlaceItModel db, iView view) {
-		this.db = db;
+	public PlaceItController(iPlaceItModelv2 db2, iView view) {
+		this.db = db2;
 		this.view = view;
 
 		this.placeits = new Vector<PlaceIt>();
 	}
 
-	public void initializeView() {
+	public void initializeView() throws IllegalStateException, IOException, JSONException {
 
 		placeits = db.getAllPlaceIts();
 		for (PlaceIt pc : placeits) {
@@ -57,11 +63,11 @@ public class PlaceItController {
 			}
 		}
 
-		PlaceIt placeit = new PlaceIt(titleText, descText, position.latitude,
+		PlaceIt placeit = new LocationPlaceIt(titleText, descText, position.latitude,
 				position.longitude);
 		
-		long insertId = db.addPlaceIt(placeit);
-		placeit.setID((int) insertId);
+		String insertId = db.addPlaceIt(placeit);
+		placeit.setID(insertId);
 		placeits.add(placeit);
 		view.addMarker(placeit);
 		return placeit;
@@ -92,12 +98,12 @@ public class PlaceItController {
 		
 	}
 
-	public List<PlaceIt> checkCoordinates(Location coords) {
+	public List<PlaceIt> checkCoordinates(Location coords) throws IllegalStateException, IOException, JSONException {
 		
 		List<PlaceIt> clean = new Vector<PlaceIt>();
 		LatLng currLoc = new LatLng(coords.getLatitude(), coords.getLongitude());
 		for (int i = 0; i < placeits.size(); i++) {
-			PlaceIt currMarker = placeits.get(i);
+			LocationPlaceIt currMarker = (LocationPlaceIt) placeits.get(i);
 			Location start = new Location("Start");
 			Location end = new Location("End");
 			if (currLoc != null && currMarker != null) {
@@ -157,7 +163,7 @@ public class PlaceItController {
 		this.removePlaceIt(placeits.get(id));
 	}
 
-	public iPlaceItModel getDB() {
+	public iPlaceItModelv2 getDB() {
 		return this.db;
 	}
 

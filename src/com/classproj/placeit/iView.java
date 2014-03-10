@@ -1,6 +1,9 @@
 package com.classproj.placeit;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.json.JSONException;
 
 import com.google.android.gms.maps.model.Marker;
 
@@ -14,6 +17,6 @@ public interface iView {
 
 	public Marker getMarker(int id);
 
-	void notifyUser(List<PlaceIt> placeits, String ControllerType);
+	void notifyUser(List<PlaceIt> placeits, String ControllerType) throws IllegalStateException, IOException, JSONException;
 
 }
