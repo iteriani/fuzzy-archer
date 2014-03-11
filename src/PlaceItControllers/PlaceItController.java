@@ -34,19 +34,20 @@ public class PlaceItController {
 	}
 
 	public void initializeView() throws IllegalStateException, IOException, JSONException {
-
+/*
 		placeits = db.getAllPlaceIts();
 		for (PlaceIt pc : placeits) {
 			if (pc.isActive()) {
 				view.addMarker(pc);
 			}
-		}
+		}*/
 	}
 
 	@SuppressLint("NewApi")
 	public PlaceIt AddPlaceIt(String titleText, String descText,
 			final LatLng position) {
-		
+		return null;
+	/*	
 		// If title and description empty. no Place-It is created, and return null.
 		if (titleText.length() == 0 && descText.length() == 0) {
 			return null;
@@ -65,22 +66,23 @@ public class PlaceItController {
 
 		PlaceIt placeit = new LocationPlaceIt(titleText, descText, position.latitude,
 				position.longitude);
+		return placeit;
 		
-		String insertId = db.addPlaceIt(placeit);
+	/*	String insertId = db.addPlaceIt(placeit);
 		placeit.setID(insertId);
 		placeits.add(placeit);
 		view.addMarker(placeit);
-		return placeit;
+		return placeit;*/
 	}
 	
 	public void deactivatePlaceIt(PlaceIt placeit){
-		db.deactivatePlaceit(placeit);
+		///db.deactivatePlaceit(placeit);
 		view.removeMarker(placeit);
 	}
 	
 	public void removePlaceIt(PlaceIt placeit){
 		
-		db.deletePlaceIt(placeit);
+	//	db.deletePlaceIt(placeit);
 		view.removeMarker(placeit);
 	}
 	

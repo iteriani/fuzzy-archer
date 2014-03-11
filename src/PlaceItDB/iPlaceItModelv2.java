@@ -1,12 +1,10 @@
 package PlaceItDB;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.json.JSONException;
-
+import HTTP.PLScheduleReceiver;
+import HTTP.PlaceItListReceiver;
+import HTTP.PlaceItReceiver;
 import HTTP.RequestReceiver;
-import Models.PlaceIt;
+import Models.PLSchedule2;
 import Models.PlaceIt;
 
 public interface iPlaceItModelv2 {
@@ -14,7 +12,7 @@ public interface iPlaceItModelv2 {
 	public void addPlaceIt(PlaceIt PlaceIt, RequestReceiver receiver);
 
 	// Getting All PlaceIts
-	public void getAllPlaceIts(RequestReceiver receiver);
+	public void getAllPlaceIts(PlaceItListReceiver receiver);
 
 	// Updating single PlaceIt
 	public void updatePlaceIt(PlaceIt placeit,RequestReceiver receiver);
@@ -27,5 +25,7 @@ public interface iPlaceItModelv2 {
 
 	public void deactivatePlaceit(PlaceIt placeit, RequestReceiver receiver);
 
-	public void getPlaceIt(String id, RequestReceiver receiver);
+	public void getPlaceIt(String id, PlaceItReceiver receiver);
+	
+	public void addSchedule(PLSchedule2 schedule, PLScheduleReceiver receiver);
 }

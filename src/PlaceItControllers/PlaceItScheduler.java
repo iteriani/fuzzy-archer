@@ -32,13 +32,13 @@ public class PlaceItScheduler {
 	}
 
 	public void setUpSchedules() throws IllegalStateException, IOException, JSONException {
-		List<PlaceIt> placeits = this.PLrepository.getAllPlaceIts();
+/*	List<PlaceIt> placeits = this.PLrepository.getAllPlaceIts();
 		for (PlaceIt placeit : placeits) {
 			if (placeit.isActive() == true) {
 				PLSchedule schedule = this.scheduleRepository.getSchedule(placeit);
 				placeit = this.initializeSchedule(placeit, schedule);
 			}
-		}
+		}*/
 	}
 
 	/*
@@ -67,7 +67,7 @@ public class PlaceItScheduler {
 		//}
 
 		placeit.setActiveDate(minDate.getTime());
-		this.PLrepository.updatePlaceIt(placeit);
+	//	this.PLrepository.updatePlaceIt(placeit);
 		return placeit;
 	}
 
@@ -139,7 +139,7 @@ public class PlaceItScheduler {
 		placeit.setActiveDate(newDate.getTime());
 		//Log.d("NEW ACTIVE DATE ", placeit.getActiveDate().toLocaleString());
 		Log.d("NEW ACTIVE DATE ", placeit.getActiveDate().toLocaleString());
-		this.PLrepository.updatePlaceIt(placeit);
+	//	this.PLrepository.updatePlaceIt(placeit);
 		 return placeit;
 	}
 	
@@ -147,7 +147,7 @@ public class PlaceItScheduler {
 		Calendar cal = Calendar.getInstance();
 		cal.add(PlaceItSettings.INTERVAL_TYPE, PlaceItSettings.INTERVAL_NUMBER);
 		placeit.setActiveDate(cal.getTime().getTime());
-		this.PLrepository.updatePlaceIt(placeit);
+	//	this.PLrepository.updatePlaceIt(placeit);
 		return placeit;
 	}
 	
@@ -166,7 +166,7 @@ public class PlaceItScheduler {
 	}
 	
 	public List<PlaceIt> checkActive(List<PlaceIt> placeits) throws IllegalStateException, IOException, JSONException{
-		List<PlaceIt> newActive = new Vector<PlaceIt>();
+		List<PlaceIt> newActive = new Vector<PlaceIt>();/*
 		for (int i = 0; i < placeits.size(); i++) {
 			PlaceIt plDB = this.PLrepository.getPlaceIt(placeits.get(i).getID());
 			Log.d(plDB.getActiveDate().toLocaleString(), new Date().toLocaleString());
@@ -187,7 +187,7 @@ public class PlaceItScheduler {
 				}
 			}
 		}
-		view.notifyUser(newActive, "Scheduler");
+		view.notifyUser(newActive, "Scheduler");*/
 		return newActive;
 	}
 

@@ -17,28 +17,31 @@ import org.json.JSONObject;
 import PlaceItDB.UserDBModel;
 
 public class WebUserService extends WebService implements UserDBModel{
-	public HttpContext context;
+	private HttpContext context;
 
+	public HttpContext getContext(){
+		return context;
+	}
 	
-	@Override
+	public WebUserService(){
+		CookieStore cookieStore = new BasicCookieStore();
+		context = new BasicHttpContext();
+		context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+	}
+	@Override 
 	public HttpContext signup(String username, String password, RequestReceiver receiver) {
 		List<NameValuePair> values = new Vector<NameValuePair>();
 		NameValuePair user = new BasicNameValuePair("pid", username);
 		NameValuePair pass = new BasicNameValuePair("password", password);
 		values.add(user);
 		values.add(pass);
-		CookieStore cookieStore = new BasicCookieStore();
-		context = new BasicHttpContext();
-		context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 		new RequestTask(receiver,context, values).execute(SIGNUP_URL);
 		return context;
 	}
 
 	@Override
 	public HttpContext login(String username, String password, RequestReceiver receiver) {
-		CookieStore cookieStore = new BasicCookieStore();
-		context = new BasicHttpContext();
-		context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+		
 		List<NameValuePair> login = new Vector<NameValuePair>();
 		login.add(new BasicNameValuePair("pid", username));
 		login.add(new BasicNameValuePair("password", password));

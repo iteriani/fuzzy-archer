@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 {
+public class PlaceItHandler extends SQLiteOpenHelper{
 
 	// All Static variables
 	// Database Version
@@ -58,7 +58,7 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 
 		onCreate(db);
 	}
 
-	@Override
+
 	public String addPlaceIt(PlaceIt placeIt) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -110,7 +110,6 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 
 			return null;
 	}
 
-	@Override
 	public void getAllPlaceIts(RequestReceiver receiver) {
 		List<PlaceIt> placeItList = new ArrayList<PlaceIt>();
 		// Select All Query
@@ -144,7 +143,6 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 
 
 	
 
-	@Override
 	public void updatePlaceIt(PlaceIt placeit, RequestReceiver receiver) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -156,14 +154,13 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 
 		// updating row
 	}
 
-	@Override
+	
 	public void deleteAll() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLACEITS);
 		onCreate(db);
 	}
 
-	@Override
 	public void deletePlaceIt(PlaceIt placeit, RequestReceiver receiver) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		
@@ -172,14 +169,12 @@ public class PlaceItHandler extends SQLiteOpenHelper implements iPlaceItModelv2 
 		db.close();
 	}
 
-	@Override
 	public void deactivatePlaceit(PlaceIt placeit) {
 		placeit.setActiveDate(0); /* maybe... */
 		//this.updatePlaceIt(placeit);
 
 	}
 
-	@Override
 	public void getPlaceIt(String id, RequestReceiver receiver) {
 		// TODO Auto-generated method stub
 		

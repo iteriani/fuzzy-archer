@@ -2,6 +2,7 @@ package com.classproj.placeit;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -15,8 +16,10 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
 
+import HTTP.PlaceItWebService;
 import HTTP.RequestReceiver;
 import HTTP.RequestTask;
+import HTTP.WebUserService;
 import Models.LocationPlaceIt;
 import Models.PlaceIt;
 import PlaceItControllers.PlaceItController;
@@ -184,7 +187,7 @@ public class MainActivity extends FragmentActivity implements
 		mLocationClient = new LocationClient(this, this, this);
 		mLocationClient.connect();
 		*/
-		CookieStore cookieStore = new BasicCookieStore();
+	/*	CookieStore cookieStore = new BasicCookieStore();
 		final HttpContext localContext = new BasicHttpContext();
 		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 		final RequestReceiver receiver2 = new RequestReceiver(){
@@ -206,7 +209,86 @@ public class MainActivity extends FragmentActivity implements
 		login.add(new BasicNameValuePair("password", "10201992Aa"));
 		
 		   new RequestTask(receiver,localContext, login).execute("http://placeit-db.herokuapp.com/login");
-		   
+		   */
+
+		final WebUserService users = new WebUserService();
+		final HttpContext context = users.getContext();
+		final PlaceItWebService placeits = new PlaceItWebService(context);
+	/*	users.login("test", "test", new RequestReceiver(){
+			@Override
+			public void receiveTask(String s) {
+				Toast.makeText(MainActivity.this,s, Toast.LENGTH_SHORT).show();
+				placeits.getAllPlaceIts(new RequestReceiver(){
+					@Override	
+					public void receiveTask(String s){
+						Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});*/
+	
+		/*users.signup("placeittest", "placeittest", new RequestReceiver(){
+			public void receiveTask(String s){
+				Toast.makeText(MainActivity.this,s, Toast.LENGTH_SHORT).show();
+			}
+		});*//*
+		users.login("test", "test", new RequestReceiver(){
+			@Override
+			public void receiveTask(String s) {
+				placeits.getPlaceIt("531d20750988150200f11204", new RequestReceiver(){
+					@Override
+					public void receiveTask(String s) {
+						Toast.makeText(MainActivity.this,s, Toast.LENGTH_SHORT).show();
+					}
+				});
+				
+			}
+		});*/
+/*
+		users.login("test", "test", new RequestReceiver(){
+			@Override
+			public void receiveTask(String s) {
+				PlaceIt placeit = new LocationPlaceIt("aa", "bb");
+				placeit.setID("531d20750988150200f11204");
+				placeit.setActiveDate(new Date().getTime());
+				placeits.updatePlaceIt(placeit, new RequestReceiver(){
+					@Override
+					public void receiveTask(String s) {
+						Toast.makeText(MainActivity.this,s, Toast.LENGTH_SHORT).show();
+					}
+				});
+				
+			}
+		});*/
+	/*	users.login("test", "test", new RequestReceiver(){
+			@Override
+			public void receiveTask(String s) {
+				PlaceIt placeit = new LocationPlaceIt("aa", "bb");
+				placeit.setID("531d20750988150200f11204");
+				placeit.setActiveDate(new Date().getTime());
+				placeits.deletePlaceIt(placeit, new RequestReceiver(){
+					@Override
+					public void receiveTask(String s) {
+						Toast.makeText(MainActivity.this,s, Toast.LENGTH_SHORT).show();
+					}
+				});
+				
+			}
+		});*/
+		users.login("test", "test", new RequestReceiver(){
+			@Override
+			public void receiveTask(String s) {
+				PlaceIt placeit = new LocationPlaceIt("aa", "bb");
+				placeit.setActiveDate(new Date().getTime());
+				placeits.addPlaceIt(placeit, new RequestReceiver(){
+					@Override
+					public void receiveTask(String s) {
+						Toast.makeText(MainActivity.this,s, Toast.LENGTH_SHORT).show();
+					}
+				});
+				
+			}
+		});
 		   
 	}
 
