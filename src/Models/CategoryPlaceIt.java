@@ -5,7 +5,6 @@ public class CategoryPlaceIt extends PlaceIt{
 	
 	public CategoryPlaceIt(String title, String description) {
 		super(title, description);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public String getCategory(){

@@ -9,7 +9,7 @@ import Models.PlaceIt;
 
 public interface iPlaceItModelv2 {
 	// Adding new PlaceIt
-	public void addPlaceIt(PlaceIt PlaceIt, RequestReceiver receiver);
+	public void addPlaceIt(PlaceIt PlaceIt, PlaceItReceiver receiver);
 
 	// Getting All PlaceIts
 	public void getAllPlaceIts(PlaceItListReceiver receiver);
