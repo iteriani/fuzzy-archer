@@ -1,7 +1,7 @@
 package HTTP;
 
-import Models.PLSchedule;
+import Models.PLSchedule2;
 
 public interface PLScheduleReceiver {
-	public void receiveSchedule(PLSchedule placeit);
+	public void receiveSchedule(PLSchedule2 placeit);
 }

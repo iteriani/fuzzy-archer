@@ -27,5 +27,5 @@ public interface iPlaceItModelv2 {
 
 	public void getPlaceIt(String id, PlaceItReceiver receiver);
 	
-	public void addSchedule(PLSchedule2 schedule, PLScheduleReceiver receiver);
+	public void addSchedule(PLSchedule2 schedule, PlaceItReceiver receiver);
 }

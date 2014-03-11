@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import Models.CategoryPlaceIt;
 import Models.LocationPlaceIt;
-import Models.PLSchedule;
 import Models.PLSchedule2;
 import Models.PlaceIt;
 import Models.PlaceItFactory;
@@ -175,14 +174,26 @@ public class PlaceItWebService extends WebService implements iPlaceItModelv2 {
 		}, context, values).execute(ADD_SCHEDULE);
 	}
 
-	public void getSchedule(PlaceIt placeit, final PLScheduleReceiver receiver) {
-		
-	}
+	public void getSchedule(final PlaceIt placeit, final PLScheduleReceiver receiver) {
+		new RequestTask(new RequestReceiver() {
+			@Override
+			public void receiveTask(String s) {
+				try {
+					JSONObject obj = new JSONObject(s);
+					PLSchedule2 schedule = new PLSchedule2(placeit.getID());
+					schedule.setStartWeek(obj.getInt("start_week"));
+					schedule.setWeek(obj.getInt("week"));
+					schedule.setDay(obj.getInt("day"));
+					receiver.receiveSchedule(schedule);
+					
+				} catch (JSONException e) {
+					receiver.receiveSchedule(null);
+					e.printStackTrace();
+				}
 
-	@Override
-	public void addSchedule(PLSchedule2 schedule, PLScheduleReceiver receiver) {
-		// TODO Auto-generated method stub
+			}
 
+		}, context).execute(ALL_PLACEITS + placeit.getID());
 	}
 
 }

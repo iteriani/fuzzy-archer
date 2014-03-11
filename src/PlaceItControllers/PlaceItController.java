@@ -35,6 +35,11 @@ public class PlaceItController {
 
 	public void initializeView() throws IllegalStateException, IOException, JSONException {
 /*
+ * 
+ * 		db.getAllPlaceIts(new PlaceItListReceiver(){
+ * 			public void receivePlaceIts(List<PlaceIt> placeits){
+ * }	
+ * 	});
 		placeits = db.getAllPlaceIts();
 		for (PlaceIt pc : placeits) {
 			if (pc.isActive()) {
